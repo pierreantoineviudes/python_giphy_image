@@ -8,6 +8,7 @@ Returns:
 
 import os
 from io import BytesIO
+from typing import Optional
 import PIL.Image
 import PIL.ImageStat
 import requests
@@ -22,17 +23,24 @@ class ImageGif:
         self.__pil_img = self.load_pil_img()
         self.__mean = self.set_img_mean()
 
-    def set_img_mean(self) -> int:
+    def set_img_mean(self) -> Optional[int]:
         """set image mean
 
         Returns:
             int: return int of mean value of pixels
         """
-        image_stat = PIL.ImageStat.Stat(self.get_pil_img())
-        mean = int(image_stat.mean[0])
-        return mean
+        try:
+            image_stat = PIL.ImageStat.Stat(self.get_pil_img())
+            mean = int(image_stat.mean[0])
+            return mean
+        except TypeError as e:
+            print("Error", e)
+            return None
+        except AttributeError as e:
+            print("Attribute Error : ", e)
+            return None
 
-    def get_random_url(self) -> str:
+    def get_random_url(self) -> Optional[str]:
         """get a random gif from giphy APIs
 
         Returns:
@@ -45,16 +53,19 @@ class ImageGif:
             timeout=5,
         )
         # TODO : mieux gérer l'exception
-        if res.status_code == 200:
+        try:
             image_url = res.json()["data"]["images"]["original"]["url"]
-        else:
+            return image_url
+        except TypeError as e:
+            print("\n")
             print("ERROR WHILE FETCHING DATA ---------------")
             print('Status code : ', res.status_code)
             print("res.content : ", res.content)
-            return ""
-        return image_url
+            print("Exception : ", e)
+            print('\n')
+            return None
 
-    def load_pil_img(self) -> PIL.Image:
+    def load_pil_img(self) -> Optional[PIL.Image.Image]:
         """loads the image from the url as a PIL.Image
 
         Returns:
@@ -67,8 +78,10 @@ class ImageGif:
             return image
         except requests.exceptions.MissingSchema as e :
             print("ERROR : ", e)
+            print("\n")
+            return None
 
-    def get_pil_img(self) -> PIL.Image:
+    def get_pil_img(self) -> Optional[PIL.Image.Image]:
         """getter of PIL image
 
         Returns:
@@ -76,7 +89,7 @@ class ImageGif:
         """
         return self.__pil_img
 
-    def get_mean(self) -> int:
+    def get_mean(self) -> Optional[int]:
         """mean of pixels getter
 
         Returns:
@@ -84,7 +97,7 @@ class ImageGif:
         """
         return self.__mean
 
-    def get_url(self) -> str:
+    def get_url(self) -> Optional[str]:
         """absolute URL of image
 
         Returns:
