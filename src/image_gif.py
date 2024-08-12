@@ -52,7 +52,6 @@ class ImageGif:
             params={"api_key": os.environ.get("GIPHY_API_KEY")},
             timeout=5,
         )
-        # TODO : mieux gérer l'exception
         try:
             image_url = res.json()["data"]["images"]["original"]["url"]
             return image_url

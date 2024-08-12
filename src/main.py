@@ -10,7 +10,7 @@ from image_gif import ImageGif
 if __name__ == '__main__':
 
     # load json existing
-    with open('./image_bdd.json', encoding='UTF-8') as outfile:
+    with open('./image_bdd.json', "r", encoding='UTF-8') as outfile:
         # palette dict
         dict_palette = json.load(outfile)
         for i in range(255):
@@ -25,4 +25,5 @@ if __name__ == '__main__':
                 print("KeyError : ", e)
 
         # save dict of images
+    with open("./image_bdd.json", "w", encoding="UTF-8") as outfile:
         json.dump(dict_palette, outfile)
