@@ -67,8 +67,8 @@ class Mosaic:
         self.__img_arr = np.asarray(
             self.__img_pil.resize([new_w, new_h], resample=BILINEAR)
         )
-        with open("./image_bdd.json", 'r') as input:
-            dict_url = json.load(input)
+        with open("./image_bdd.json", 'r', encoding="UTF-8") as input_file:
+            dict_url = json.load(input_file)
             for i in tqdm(range(new_w), desc="Processing rows"):
                 for j in tqdm(range(new_w), desc="Processing columns", leave=False):
                     value = self.__img_arr[i, j]
@@ -79,14 +79,14 @@ class Mosaic:
                         index = np.random.randint(len(dict_url[str(value)]))
 
                         # remplacer les pixels
-                        image = self.load_img_from_url(
+                        image_arr = self.load_img_from_url(
                             dict_url[str(value)][index]
                         ).resize((TAILLE_DALLE,  TAILLE_DALLE))
 
                         output_arr[
                             i*TAILLE_DALLE:(i+1)*TAILLE_DALLE,
                             j*TAILLE_DALLE:(j+1)*TAILLE_DALLE
-                        ] = image
+                        ] = image_arr
                     else:
                         output_arr[
                             i*TAILLE_DALLE:(i+1)*TAILLE_DALLE,
@@ -105,8 +105,8 @@ class Mosaic:
         """
         res = requests.get(url=url, timeout=5)
         image_data = BytesIO(res.content)
-        image = PIL.Image.open(image_data).convert("L")
-        return image
+        pil_image = PIL.Image.open(image_data).convert("L")
+        return pil_image
 
     def save_img_mosaic(self) -> None:
         """Method to save the mosaic generated
