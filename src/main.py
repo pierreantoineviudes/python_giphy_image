@@ -13,14 +13,14 @@ if __name__ == '__main__':
     with open('./image_bdd.json', "r", encoding='UTF-8') as outfile:
         # palette dict
         dict_palette = json.load(outfile)
-        for i in range(255):
-            dict_palette[i] = []
+        # for i in range(255):
+        #     dict_palette[i] = []
 
         # load image from url (100)
         for i in tqdm(range(NUMBER_IMG)):
             try:
                 img = ImageGif()
-                dict_palette[img.get_mean()].append(img.get_url())
+                dict_palette[str(img.get_mean())].append(img.get_url())
             except KeyError as e:
                 print("KeyError : ", e)
 
