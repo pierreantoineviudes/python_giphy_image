@@ -11,7 +11,7 @@ import PIL.Image
 from PIL.image import BILINEAR
 import numpy as np
 import requests
-from constants import TAILLE_DALLE, ALPHA
+from constants import TAILLE_DALLE, ALPHA, IMG_PATH, OUTPUT_PATH
 
 class Mosaic:
     """class for the Mosaic image
@@ -108,11 +108,14 @@ class Mosaic:
         pil_image = PIL.Image.open(image_data).convert("L")
         return pil_image
 
-    def save_img_mosaic(self) -> None:
-        """Method to save the mosaic generated
+    def save_img_mosaic(self, ouput_path) -> None:
+        """method to save the created mosaic
+
+        Args:
+            ouput_path (String): path desired to the saved image
         """
-        self.__img_mosaic.save('./images/output.gif')
+        self.__img_mosaic.save(ouput_path)
 
 if __name__ == '__main__':
-    image = Mosaic("./images/moicassou.jpg")
-    image.save_img_mosaic()
+    image = Mosaic(img_path=IMG_PATH)
+    image.save_img_mosaic(OUTPUT_PATH)
