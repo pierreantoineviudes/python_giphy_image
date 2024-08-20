@@ -8,6 +8,7 @@ import json
 from io import BytesIO
 from tqdm import tqdm
 import PIL.Image
+from PIL.image import BILINEAR
 import numpy as np
 import requests
 from constants import TAILLE_DALLE, ALPHA
@@ -64,7 +65,7 @@ class Mosaic:
         output_arr = np.zeros((TAILLE_DALLE * new_w, TAILLE_DALLE * new_h))
         self.__img_pil = self.__img_pil.convert("L")
         self.__img_arr = np.asarray(
-            self.__img_pil.resize([new_w, new_h], resample=PIL.Image.BILINEAR)
+            self.__img_pil.resize([new_w, new_h], resample=BILINEAR)
         )
         with open("./image_bdd.json", 'r') as input:
             dict_url = json.load(input)
